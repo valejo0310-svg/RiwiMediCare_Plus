@@ -1,0 +1,34 @@
+{
+  "name": "riwimedicare_plus",
+  "version": "1.0.0",
+  "description": "\"# API con Node, Express, TypeScript, Swagger y Sequelize para PostgreSQL\"",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js",
+    "prod": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valejo0310-svg/RiwiMediCare_Plus.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/valejo0310-svg/RiwiMediCare_Plus/issues"
+  },
+  "homepage": "https://github.com/valejo0310-svg/RiwiMediCare_Plus#readme",
+  "dependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/node": "^26.4.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "typescript": "^7.0.2"
+  }
+}
