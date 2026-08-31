@@ -127,5 +127,23 @@ Before running the project, ensure you have the following:
 
 Run the following command from the project root:
 
-```bash
+´´´bash
 npm install
+
+cp .example.env .env
+
+´´´
+PORT=3000
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=RiwiMedic_db
+DB_USER=postgres
+DB_PASSWORD=123456
+
+JWT_SECRET=riwimedicare_secret_key
+´´´
+
+npm run dev
+
+´´´
