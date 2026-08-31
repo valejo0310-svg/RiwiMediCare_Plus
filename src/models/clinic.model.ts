@@ -1,101 +1,96 @@
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/database';
+// Imports Sequelize data types and the base Model class
+// used to define the clinic database model.
+import { DataTypes, Model } from "sequelize";
+
+// Imports the configured Sequelize instance
+// used to connect the model with PostgreSQL.
+import { sequelize } from "../config/database";
 
 /**
- * Represents a Clinic entity in the system.
- * Stores information about medical centers/branches and their responsible administrator.
- * 
- * @class Clinics
- * @extends {Model}
+ * Represents a clinic registered in the system.
+ *
+ * Each clinic contains identification information,
+ * a responsible user, and an active state used
+ * to control its availability in the application.
  */
 export class clinics extends Model {
-    /** 
-     * Unique auto-incrementing identifier for the clinic.
-     * @type {number} 
-     */
+
+    // Unique identifier of the clinic.
     declare id: number;
 
-    /** 
-     * Commercial or institutional name of the clinic.
-     * @type {string} 
-     */
+    // Name of the clinic.
     declare name: string;
 
-    /** 
-     * ID of the user in charge or administrator of the clinic (Foreign Key).
-     * @type {number} 
-     */
+    // Unique tax identification number of the clinic.
+    declare nit: string;
+
+    // Identifier of the user responsible for the clinic.
     declare responsibleId: number;
 
-    /** 
-     * Activity status of the clinic in the platform.
-     * @type {boolean} 
-     * @default true
-     */
+    // Indicates whether the clinic is currently active.
     declare active: boolean;
 
-    /** 
-     * Clinic registration date (Automatically generated).
-     * @type {Date} 
-     */
-    declare createdAt: Date;
+    // Date when the clinic record was created.
+    declare readonly createdAt: Date;
 
-    /** 
-     * Date of the last modification of data (Automatically generated).
-     * @type {Date} 
-     */
-    declare updatedAt: Date;
-
-    /** 
-     * Inactivation or logical deletion date (Paranoid mode).
-     * @type {Date | null} 
-     */
-    declare deletedAt: Date | null;
+    // Date when the clinic record was last updated.
+    declare readonly updatedAt: Date;
 }
 
-// Model initialization with Sequelize
+/**
+ * Initializes the clinic model and defines
+ * its database columns and configuration.
+ */
 clinics.init(
     {
-        /**
-         * Auto-incrementing primary key of the clinic.
-         */
+        // Primary key of the clinic table.
         id: {
             type: DataTypes.INTEGER,
-            primaryKey: true,
             autoIncrement: true,
-            allowNull: false
+            primaryKey: true
         },
-        /**
-         * Official name of the medical center.
-         */
+
+        // Stores the clinic name.
         name: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        /**
-         * ID of the responsible user. Links this clinic to a record in the 'users' table.
-         */
+
+        // Stores the clinic tax identification number.
+        // The value must be unique in the database.
+        nit: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true
+        },
+
+        // Stores the identifier of the user
+        // responsible for the clinic.
         responsibleId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "users",
-                key: "id"
-            }
+            allowNull: false
         },
-        /**
-         * Controls whether the clinic is operational or disabled in the system workflow.
-         */
+
+        // Controls whether the clinic
+        // is currently active in the system.
         active: {
             type: DataTypes.BOOLEAN,
-            defaultValue: true,
-            allowNull: false
+            allowNull: false,
+            defaultValue: true
         }
     },
     {
-        sequelize: sequelize,
+        // Associates the model with the configured
+        // Sequelize database connection.
+        sequelize,
+
+        // Defines the database table name.
         tableName: "clinics",
-        timestamps: true, // Enables createdAt and updatedAt
-        paranoid: true    // Enables deletedAt for soft-delete
+
+        // Enables automatic createdAt and updatedAt fields.
+        timestamps: true,
+
+        // Enables Sequelize paranoid mode.
+        paranoid : true
     }
 );

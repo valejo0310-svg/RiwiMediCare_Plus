@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "name": "Administrador Seeder",
+      "email": "seedadmin@riwimedicare.com",
+      "password": "Admin123!",
+      "role": "ADMIN"
+    },
+    {
+      "name": "Gestor Seeder",
+      "email": "seedmanager@riwimedicare.com",
+      "password": "Manager123!",
+      "role": "REQUEST_MANAGER"
+    }
+  ],
+
+  "warehouses": [
+    {
+      "name": "Almacen Norte",
+      "location": "Medellin"
+    }
+  ],
+
+  "medications": [
+    {
+      "name": "Ibuprofeno",
+      "description": "Tabletas 400 mg"
+    }
+  ],
+
+  "clinics": [
+    {
+      "name": "Clinica Norte",
+      "nit": "901555001",
+      "responsibleEmail": "seedmanager@riwimedicare.com"
+    }
+  ],
+
+  "inventories": [
+    {
+      "warehouseName": "Almacen Norte",
+      "medicationName": "Ibuprofeno",
+      "quantity": 500
+    }
+  ]
+}

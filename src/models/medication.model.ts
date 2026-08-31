@@ -1,61 +1,80 @@
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/database';
+// Imports Sequelize data types and the base Model class
+// used to define the medication database model.
+import { DataTypes, Model } from "sequelize";
+
+// Imports the configured Sequelize instance
+// used to connect the model with PostgreSQL.
+import { sequelize } from "../config/database";
 
 /**
- * Represents the medication entity in the system.
- * @class medication
- * @extends {Model}
+ * Represents a medication registered in the system.
+ *
+ * Each medication contains a name, description,
+ * and an active state used to control its availability.
  */
 export class medication extends Model {
-    /** 
-     * Unique auto-incrementing identifier for the warehouse.
-     * @type {number} 
-     */
+
+    // Unique identifier of the medication.
     declare id: number;
-     /** 
-     * Official description of the medicine.
-     * @type {string} 
-     */
-    declare description : string;
-    /** 
-     * Operational status of the medicine in the platform.
-     * @type {boolean} 
-     * @default true
-     */
-    declare active : boolean;
+
+    // Name of the medication.
+    declare name: string;
+
+    // Description of the medication.
+    declare description: string;
+
+    // Indicates whether the medication is currently active.
+    declare active: boolean;
+
+    // Date when the medication record was created.
+    declare readonly createdAt: Date;
+
+    // Date when the medication record was last updated.
+    declare readonly updatedAt: Date;
 }
-// Model initialization with Sequelize
+
+/**
+ * Initializes the medication model and defines
+ * its database columns and configuration.
+ */
 medication.init(
     {
-        /**
-         * Auto-incrementing primary key of the warehouse.
-         */
+        // Primary key of the medication table.
         id: {
             type: DataTypes.INTEGER,
-            primaryKey: true,
             autoIncrement: true,
+            primaryKey: true
+        },
+
+        // Stores the medication name.
+        name: {
+            type: DataTypes.STRING,
             allowNull: false
         },
-        /**
-         * description of the medication.
-         */
+
+        // Stores the medication description.
         description: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        /**
-         * Controls whether the warehouse is active and available in the system.
-         */
+
+        // Controls whether the medication
+        // is currently active in the system.
         active: {
             type: DataTypes.BOOLEAN,
-            defaultValue: true,
-            allowNull: false
+            allowNull: false,
+            defaultValue: true
         }
     },
     {
-        sequelize: sequelize,
+        // Associates the model with the configured
+        // Sequelize database connection.
+        sequelize,
+
+        // Defines the database table name.
         tableName: "medications",
-        timestamps: true, // Automatically enables createdAt and updatedAt
-        paranoid: true    // Enables deletedAt for soft-delete
+
+        // Enables automatic createdAt and updatedAt fields.
+        timestamps: true
     }
 );
