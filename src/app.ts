@@ -183,7 +183,7 @@ app.use(
  * Mounts medication supply request routes.
  */
 app.use(
-    "/api/supply-request",
+    "/api/requests",
     supplyRequestRouter
 );
 
