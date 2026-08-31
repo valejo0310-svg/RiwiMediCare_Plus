@@ -7,39 +7,36 @@ export class Inventory extends Model {
     declare medicationId: number;
     declare quantity: number;
     declare active: boolean;
+
+    declare readonly createdAt: Date;
+    declare readonly updatedAt: Date;
 }
 
 Inventory.init(
     {
         id: {
             type: DataTypes.INTEGER,
-            primaryKey: true,
             autoIncrement: true,
-            allowNull: false
+            primaryKey: true
         },
 
         warehouseId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "warehouses",
-                key: "id"
-            }
+            allowNull: false
         },
 
         medicationId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "medications",
-                key: "id"
-            }
+            allowNull: false
         },
 
         quantity: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 0
+            defaultValue: 0,
+            validate: {
+                min: 0
+            }
         },
 
         active: {
@@ -52,11 +49,14 @@ Inventory.init(
         sequelize,
         tableName: "inventories",
         timestamps: true,
-        paranoid: true,
+
         indexes: [
             {
                 unique: true,
-                fields: ["warehouseId", "medicationId"]
+                fields: [
+                    "warehouseId",
+                    "medicationId"
+                ]
             }
         ]
     }

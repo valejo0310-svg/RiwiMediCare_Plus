@@ -1,27 +1,60 @@
-import { app } from './app';
-import dotenv from 'dotenv';
-import { testDatabaseConnection } from './config/database';
-import './models/associations.model'
-import { sequelize } from './config/database';
-dotenv.config();
+import "dotenv/config";
 
-const PORT = Number(process.env.PORT) || 3000
+import { app } from "./app";
+import {
+    sequelize,
+    testDatabaseConnection
+} from "./config/database";
+
+import "./models/associations.model";
+
+const PORT = Number(process.env.PORT) || 3000;
 
 
-export async function startServer () : Promise <void>{
+/*
+|--------------------------------------------------------------------------
+| HTTP SERVER
+|--------------------------------------------------------------------------
+*/
+
+app.listen(PORT, () => {
+
+    console.log(
+        `Server running on http://localhost:${PORT}`
+    );
+
+    console.log(
+        `Health: http://localhost:${PORT}/api/health`
+    );
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| DATABASE
+|--------------------------------------------------------------------------
+*/
+
+async function initializeDatabase(): Promise<void> {
+
     try {
+
         await testDatabaseConnection();
-        await sequelize.sync({ alter: false });
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
+
+        await sequelize.sync();
+
+        console.log(
+            "Database synchronized successfully"
+        );
+
     } catch (error) {
-        console.error(`Error starting server: ${error}`);
-        process.exit(1);
+
+        console.error(
+            "Database error:",
+            error
+        );
     }
 }
 
-startServer().catch(error => {
-    console.error("Fatal error:", error);
-    process.exit(1);
-});
+
+initializeDatabase();
