@@ -13,12 +13,16 @@ import { SupplyRequest } from "./supply-request.model";
 
 users.hasMany(clinics, {
     foreignKey: "responsibleId",
-    as: "clinics"
+    as: "clinics",
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
 });
 
 clinics.belongsTo(users, {
     foreignKey: "responsibleId",
-    as: "responsible"
+    as: "responsible",
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
 });
 
 /*
@@ -29,12 +33,16 @@ clinics.belongsTo(users, {
 
 warehouse.hasMany(Inventory, {
     foreignKey: "warehouseId",
-    as: "inventories"
+    as: "inventories",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
 });
 
 Inventory.belongsTo(warehouse, {
     foreignKey: "warehouseId",
-    as: "warehouse"
+    as: "warehouse",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
 });
 
 /*
@@ -45,12 +53,16 @@ Inventory.belongsTo(warehouse, {
 
 medication.hasMany(Inventory, {
     foreignKey: "medicationId",
-    as: "inventories"
+    as: "inventories",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
 });
 
 Inventory.belongsTo(medication, {
     foreignKey: "medicationId",
-    as: "medication"
+    as: "medication",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
 });
 
 /*
@@ -61,12 +73,16 @@ Inventory.belongsTo(medication, {
 
 clinics.hasMany(SupplyRequest, {
     foreignKey: "clinicId",
-    as: "supplyRequests"
+    as: "supplyRequests",
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
 });
 
 SupplyRequest.belongsTo(clinics, {
     foreignKey: "clinicId",
-    as: "clinic"
+    as: "clinic",
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
 });
 
 /*
@@ -77,12 +93,16 @@ SupplyRequest.belongsTo(clinics, {
 
 medication.hasMany(SupplyRequest, {
     foreignKey: "medicationId",
-    as: "supplyRequests"
+    as: "supplyRequests",
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
 });
 
 SupplyRequest.belongsTo(medication, {
     foreignKey: "medicationId",
-    as: "medication"
+    as: "medication",
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
 });
 
 /*
@@ -93,12 +113,16 @@ SupplyRequest.belongsTo(medication, {
 
 warehouse.hasMany(SupplyRequest, {
     foreignKey: "warehouseId",
-    as: "supplyRequests"
+    as: "supplyRequests",
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
 });
 
 SupplyRequest.belongsTo(warehouse, {
     foreignKey: "warehouseId",
-    as: "warehouse"
+    as: "warehouse",
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
 });
 
 /*
@@ -109,12 +133,16 @@ SupplyRequest.belongsTo(warehouse, {
 
 users.hasMany(SupplyRequest, {
     foreignKey: "createdBy",
-    as: "createdRequests"
+    as: "createdRequests",
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
 });
 
 SupplyRequest.belongsTo(users, {
     foreignKey: "createdBy",
-    as: "creator"
+    as: "creator",
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE"
 });
 
 export {
