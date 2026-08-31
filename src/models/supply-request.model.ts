@@ -1,118 +1,141 @@
+// Imports Sequelize data types and the base Model class
+// used to define the supply request database model.
 import { DataTypes, Model } from "sequelize";
+
+// Imports the configured Sequelize instance
+// used to connect the model with PostgreSQL.
 import { sequelize } from "../config/database";
+
 /**
- * Represents a Supply Request model in the database.
- * @class SupplyRequest
- * @extends {Model}
+ * Defines the valid lifecycle statuses
+ * available for a supply request.
+ */
+export type RequestStatus =
+    | "PENDING"
+    | "APPROVED"
+    | "REJECTED"
+    | "DISPATCHED"
+    | "COMPLETED";
+
+/**
+ * Represents a medication supply request.
+ *
+ * Each request is associated with a clinic,
+ * medication, warehouse, requested quantity,
+ * current status, creator, and active state.
  */
 export class SupplyRequest extends Model {
-  /**
-   * The unique identifier for the supply request.
-   * @type {number}
-   */
-  declare id: number;
 
-  /**
-   * The ID of the clinic making the request.
-   * @type {number}
-   */
-  declare clinicId: number;
+    // Unique identifier of the supply request.
+    declare id: number;
 
-  /**
-   * The ID of the requested medication.
-   * @type {number}
-   */
-  declare medicationId: number;
+    // Identifier of the clinic related to the request.
+    declare clinicId: number;
 
-  /**
-   * The ID of the warehouse fulfilling the request.
-   * @type {number}
-   */
-  declare warehouseId: number;
+    // Identifier of the requested medication.
+    declare medicationId: number;
 
-  /**
-   * The number of medication units requested.
-   * @type {number}
-   */
-  declare quantity: number;
+    // Identifier of the warehouse assigned to the request.
+    declare warehouseId: number;
 
-  /**
-   * The current status of the request (e.g., 'PENDING', 'APPROVED').
-   * @type {string}
-   */
-  declare status: string;
+    // Quantity of medication requested.
+    declare quantity: number;
 
-  /**
-   * The ID of the user who created the supply request.
-   * @type {number}
-   */
-  declare createdBy: number;
+    // Current lifecycle status of the supply request.
+    declare status: RequestStatus;
 
-  /**
-   * Indicates whether the supply request record is active.
-   * @type {boolean}
-   */
-  declare active: boolean;
+    // Identifier of the user who created the request.
+    declare createdBy: number;
+
+    // Indicates whether the supply request is currently active.
+    declare active: boolean;
+
+    // Date when the supply request record was created.
+    declare readonly createdAt: Date;
+
+    // Date when the supply request record was last updated.
+    declare readonly updatedAt: Date;
 }
 
 /**
- * Initializes the SupplyRequest model schema and configuration options.
+ * Initializes the supply request model and defines
+ * its database columns and configuration.
  */
 SupplyRequest.init(
-  {
-    /** Unique primary key, auto-incremented. */
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-      allowNull: false
-    },
-    /** Foreign key referencing the clinic. */
-    clinicId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    /** Foreign key referencing the requested medication. */
-    medicationId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    /** Foreign key referencing the target warehouse. */
-    warehouseId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    /** Total quantity of items requested. */
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    /** Current lifecycle state of the request. Defaults to 'PENDING'. */
-    status: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: "PENDING"
-    },
-    /** Foreign key referencing the user who created the request. */
-    createdBy: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    /** Flag for soft deletion or record availability. Defaults to true. */
-    active: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true
-    }
-  },
-  {
-    /** Database connection instance. */
-    sequelize,
-    /** Name of the table in the database. */
-    tableName: "supply_requests",
-    /** Automatically adds createdAt and updatedAt fields. */
-    timestamps: true,
-    paranoid: true
-  }
-);
+    {
+        // Primary key of the supply request table.
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
 
+        // Stores the identifier of the related clinic.
+        clinicId: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+
+        // Stores the identifier of the requested medication.
+        medicationId: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+
+        // Stores the identifier of the assigned warehouse.
+        warehouseId: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+
+        // Stores the requested medication quantity.
+        // The quantity must be at least one.
+        quantity: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                min: 1
+            }
+        },
+
+        // Stores the current lifecycle status
+        // of the supply request.
+        status: {
+            type: DataTypes.ENUM(
+                "PENDING",
+                "APPROVED",
+                "REJECTED",
+                "DISPATCHED",
+                "COMPLETED"
+            ),
+            allowNull: false,
+            defaultValue: "PENDING"
+        },
+
+        // Stores the identifier of the user
+        // who created the supply request.
+        createdBy: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+
+        // Controls whether the supply request
+        // is currently active in the system.
+        active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true
+        }
+    },
+    {
+        // Associates the model with the configured
+        // Sequelize database connection.
+        sequelize,
+
+        // Defines the database table name.
+        tableName: "supply_requests",
+
+        // Enables automatic createdAt and updatedAt fields.
+        timestamps: true
+    }
+);
